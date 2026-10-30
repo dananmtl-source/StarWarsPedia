@@ -10,8 +10,10 @@ export async function getApiInfoClass(category){
     return buildIndexPlanetList(classList);
 }
 
+//#region apiCalls
+
 // Función de llamada a la API en función de su categoría y con función de search mediante un filtro
-async function callApiByCategory(category, filtro){
+async function callApiByCategory(category, filtro, wookiee = false){
 
     try {
         let apiUrl = `https://swapi.dev/api/${category}/3`;
@@ -23,6 +25,9 @@ async function callApiByCategory(category, filtro){
                 url.searchParams.set("page", "2");
             }
             url.searchParams.set("search",filtro);
+        }
+        if(wookiee){
+            url.searchParams.set("format", "wookiee")
         }
 
         //TODO: comprobamos si tenemos la información que se busca en caché (localStorage o lo que sea)
@@ -142,6 +147,9 @@ function buildIndexPlanetList(planetList){
     });
 }
 
+//#endregion
+
+
 getApiInfoClass();
 
 // {
@@ -154,62 +162,3 @@ getApiInfoClass();
 // }
 
 
-// function buildSpeciesList(){
-//     try {
-//         let speciesUrl = "https://swapi.dev/api/species/";
-//         let url = new URL(apiUrl);
-//         if(speciesCache.size > 0) return speciesCache;
-
-//         const res = await fetch(url);
-//         if(!res.ok){
-//             throw new Error(res.json());
-//         }
-//         cont data = await re.json();
-//         speciesCache = data;
-
-//         return data;
-
-//     } catch (error) {
-//         console.error("Error en la llamada a las species: ", error)
-//     }
-// }
-
-// function buildVehiclesList(){
-//     try {
-//         let vehiclesUrl = "https://swapi.dev/api/vehicles/";
-//         let url = new URL(apiUrl);
-//         if(vehiclesCache.size > 0) return vehiclesCache;
-
-//         const res = await fetch(url);
-//         if(!res.ok){
-//             throw new Error(res.json());
-//         }
-//         cont data = await re.json();
-//         vehiclesCache = data;
-
-//         return data;
-
-//     } catch (error) {
-//         console.error("Error en la llamada a los vehicles: ", error)
-//     }
-// }
-
-// function buildStarshipsList(){
-//     try {
-//         let starshipsUrl = "https://swapi.dev/api/starships/";
-//         let url = new URL(apiUrl);
-//         if(starshipsCache.size > 0) return starshipsCache;
-
-//         const res = await fetch(url);
-//         if(!res.ok){
-//             throw new Error(res.json());
-//         }
-//         cont data = await re.json();
-//         starshipsCache = data;
-
-//         return data;
-
-//     } catch (error) {
-//         console.error("Error en la llamada a los starships: ", error)
-//     }
-// }
