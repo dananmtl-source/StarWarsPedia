@@ -1,0 +1,39 @@
+@import url(/css/variables.css);
+
+.gridBase>header {
+    grid-area: header;
+}
+
+.gridBase>main {
+    grid-area: main;
+}
+
+.gridBase>footer {
+    grid-area: footer;
+}
+
+.gridBase {
+    display: grid;
+    grid-template-columns: repeat(6, 2fr);
+    grid-template-rows: auto 12fr auto;
+    grid-template-areas:
+        /* "header header header header header header" */
+        "main main main main main main"
+        "footer footer footer footer footer footer";
+    gap: 0px;
+    min-height: 100vh;
+}
+
+.indexMain{
+    height: 100%;
+    width: 100%;
+    
+}
+
+.indexBody{
+    background-image: url("../assets/images/starBackground.webp");
+}
+
+.indexFooter{
+    background-color: rgba(41, 13, 13, 0.48);
+}
