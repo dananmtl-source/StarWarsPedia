@@ -1,13 +1,13 @@
 import * as classCode from './class/class.js'; 
 
 //Function: llamamos a la api y construimos nuestra clase con la información
-export async function getApiInfoClass(category){
-    category = "planets";
+export async function getApiInfoClass(){
+    const category = document.location.searchParams.get("category");
     const filtro = "";
     const response = await callApiByCategory(category, filtro);
 
-    const classList = buildResponseClass(category, response);
-    return buildIndexPlanetList(classList);
+    const classList = buildElementList(category, response);
+    return createElementCard(classList);
 }
 
 //#region apiCalls
@@ -16,18 +16,15 @@ export async function getApiInfoClass(category){
 async function callApiByCategory(category, filtro, wookiee = false){
 
     try {
-        let apiUrl = `https://swapi.dev/api/${category}/3`;
+        let apiUrl = `https://swapi.dev/api/${category}`;
         let url = new URL(apiUrl);
 
         if(filtro !== "none" && filtro.length>0){
-            //TODO: arreglar paginador, esta de ejemplo pero no va.
-            if(filtro === "page"){
-                url.searchParams.set("page", "2");
-            }
+
             url.searchParams.set("search",filtro);
         }
         if(wookiee){
-            url.searchParams.set("format", "wookiee")
+            url.searchParams.set("format", "wookiee");
         }
 
         //TODO: comprobamos si tenemos la información que se busca en caché (localStorage o lo que sea)
@@ -45,18 +42,125 @@ async function callApiByCategory(category, filtro, wookiee = false){
     }
 }
 
+async function callApiByElement(link, wookiee = false){
+    try{
+        let ulr = new URL(link);
+
+        if(wookiee){
+            url.searchParams.set("format", "wookiee");
+        }
+        const res = await fetch(url);
+        if(!res.ok){
+            throw new Error(res.json());
+        }
+        const data = await res.json();
+
+        return data;
+
+    } catch (error) {
+        console.error(`Error en la llamada a ${link}: `, error);
+    }
+}
+
 
 // Función para recoger los datos de la api y guardarlos en mi clase con cierto orden.
-function buildResponseClass(category, data){
+function buildElementList(category, data){
     const dataList = [];
     dataList.push(data);
-    const classList = [];
+    const classList = new classCode.elementList(dataList[0].previous,dataList[0].next,[]);
 
     const dataResult = data.results;
 
-    dataList.forEach(element => {
+    dataResult.forEach(element => {
         let classCreated = undefined;
         switch (category) {
+            case "people":
+                classCreated = new classCode.People();
+                classCreated.name = element.name;
+                classCreated.url = element.url;
+                classList.elementAbreviatedList.push(classCreated);
+                break;
+
+            case "planets":
+                classCreated = new classCode.Planets();
+                classCreated.name = element.name;
+                classCreated.url = element.url;
+                classList.elementAbreviatedList.push(classCreated);
+                break;
+
+            case "species":
+                classCreated = new classCode.Species();
+                classCreated.name = element.name;
+                classCreated.url = element.url;
+                classList.elementAbreviatedList.push(classCreated);
+                break;
+
+            case "starships":
+                classCreated = new classCode.Starships();
+                classCreated.name = element.name;
+                classCreated.url = element.url;
+                classList.elementAbreviatedList.push(classCreated);
+                break;
+            
+            case "vehicles":
+                classCreated = new classCode.Vehicles();
+                classCreated.name = element.name;
+                classCreated.url = element.url;
+                classList.elementAbreviatedList.push(classCreated);
+                break;
+        
+            default:
+                break;
+        }
+    });
+    return classList;
+}
+
+
+function createElementCard(element,onFavorite=()=>{}) {
+    const article = document.createElement("article");
+    article.classList.add("element-card");
+    article.dataset.id = element.name;
+
+    const title = document.createElement("h3");
+
+    title.append(element.name);
+
+    //TODO:la imagen será dinamica en función del nombre cogiendola de una url
+    const image = document.createElement("img");
+    image.src = element.url.replace("https://swapi.dev/api/","https://starwarsgallery.netlify.app/assets/")+".jpg";
+    image.setAttribute("alt", element.name);
+
+    
+    const favoriteButton = document.createElement("button");
+    const isFavorite = isInFavorites(element);
+    if (isFavorite) {
+        favoriteButton.classList.add("favorite");
+        favoriteButton.textContent = "Unlike";
+    } else {
+        favoriteButton.textContent = "Like";
+    }
+
+    favoriteButton.addEventListener("click", () => {
+        const isFavorite = toggleFavorite(element);
+        if (isFavorite) {
+            favoriteButton.classList.add("favorite");
+            favoriteButton.textContent = "Unlike";
+            onFavorite(element,true);
+        } else {
+            favoriteButton.classList.remove("favorite");
+            favoriteButton.textContent = "Like";
+            onFavorite(element,false);
+        }
+    })
+
+    article.append(image, title, favoriteButton);
+    return article;
+
+}
+
+function buildElementDetails(element){
+    switch (category) {
             case "people":
                 classCreated = new classCode.People();
                 classCreated.name = element.name;
@@ -68,7 +172,7 @@ function buildResponseClass(category, data){
                 classCreated.species = element.species;
                 classCreated.vehicles = element.vehicles;
                 classCreated.starships = element.starships;
-                classList.push(classCreated);
+                classList.elementAbreviatedList.push(classCreated);
                 break;
 
             case "planets":
@@ -81,7 +185,7 @@ function buildResponseClass(category, data){
                 classCreated.surface_water = element.surface_water;
                 classCreated.population = element.population;
                 classCreated.residents = element.residents;
-                classList.push(classCreated);
+                classList.elementAbreviatedList.push(classCreated);
                 break;
 
             case "species":
@@ -94,7 +198,7 @@ function buildResponseClass(category, data){
                 classCreated.homeworld = element.homeworld;
                 classCreated.language = element.language;
                 classCreated.people = element.people;
-                classList.push(classCreated);
+                classList.elementAbreviatedList.push(classCreated);
                 break;
 
             case "starships":
@@ -105,7 +209,7 @@ function buildResponseClass(category, data){
                 classCreated.cost_in_credits = element.cost_in_credits;
                 classCreated.starship_class = element.starship_class;
                 classCreated.pilots = element.pilots;
-                classList.push(classCreated);
+                classList.elementAbreviatedList.push(classCreated);
                 break;
             
             case "vehicles":
@@ -116,35 +220,12 @@ function buildResponseClass(category, data){
                 classCreated.cost_in_credits = element.cost_in_credits;
                 classCreated.vehicle_class = element.vehicle_class;
                 classCreated.pilots = element.pilots;
-                classList.push(classCreated);
+                classList.elementAbreviatedList.push(classCreated);
                 break;
         
             default:
                 break;
         }
-        return classList;
-        
-    });
-}
-
-
-//functión par aconstruir el selector de planetas en función de lo que devuelva la API.
-function buildIndexPlanetList(planetList){
-    let count = 0;
-    let ul = document.GetElementByID("ul-planets");
-
-    planetList.forEach(element => {
-        count++;
-        let li = document.CreateElement("li");
-        let p = document.CreateElement("p");
-        let img = document.CreateElement("img");
-        
-        li.setAttribute("id", `li${count}`);
-        p.setAttribute("id", `p${count}`);
-        img.setAttribute("id",`img${count}`);
-        img.setAttribute("src", `${element.name}.webp`);
-        
-    });
 }
 
 //#endregion
