@@ -1,18 +1,9 @@
 import * as classCode from './class/class.js'; 
 
-//Function: llamamos a la api y construimos nuestra clase con la información
-export async function getApiInfoClass(){
-    const category = document.location.searchParams.get("category");
-    const filtro = "";
-    const response = await callApiByCategory(category, filtro);
-
-    const classList = buildElementList(category, response);
-    return createElementCard(classList);
-}
 
 //#region apiCalls
 
-// Función de llamada a la API en función de su categoría y con función de search mediante un filtro
+// Función de llamada a la API en función de su categoría y con función de search mediante un filtro para recibir los elementos por categoría
 async function callApiByCategory(category, filtro, wookiee = false){
 
     try {
@@ -26,8 +17,6 @@ async function callApiByCategory(category, filtro, wookiee = false){
         if(wookiee){
             url.searchParams.set("format", "wookiee");
         }
-
-        //TODO: comprobamos si tenemos la información que se busca en caché (localStorage o lo que sea)
         
         const res = await fetch(url);
         if(!res.ok){
@@ -42,6 +31,7 @@ async function callApiByCategory(category, filtro, wookiee = false){
     }
 }
 
+// Función de llamada a la API para recibir la infomación de un elemento.
 async function callApiByElement(link, wookiee = false){
     try{
         let ulr = new URL(link);
@@ -63,7 +53,7 @@ async function callApiByElement(link, wookiee = false){
 }
 
 
-// Función para recoger los datos de la api y guardarlos en mi clase con cierto orden.
+// Función para recoger los datos de la api y guardarlos en mi clase con cierto orden (Lista de elementos).
 function buildElementList(category, data){
     const dataList = [];
     dataList.push(data);
@@ -117,7 +107,8 @@ function buildElementList(category, data){
 }
 
 
-function createElementCard(element,onFavorite=()=>{}) {
+// Función para crear las tarjetas de los elementos que se mostrarán en el listado por categorías.
+function createListElementCard(element,onFavorite=()=>{}) {
     const article = document.createElement("article");
     article.classList.add("element-card");
     article.dataset.id = element.name;
@@ -159,6 +150,7 @@ function createElementCard(element,onFavorite=()=>{}) {
 
 }
 
+// Función para recoger los datos de la api y guardarlos en mi clase con cierto orden (Detalles de elemento).
 function buildElementDetails(element){
     switch (category) {
             case "people":
@@ -228,18 +220,55 @@ function buildElementDetails(element){
         }
 }
 
+// Función para completar con información la página de detalles y crear su listado de características. 
+function createElementDetailsCard(element,onFavorite=()=>{}) {
+    
+    const title = document.getElementById("detail-title");
+    title.append(element.name);
+
+    const image = document.getElementById("detail-img");
+    image.src = (element.url.replace("https://swapi.dev/api/","https://starwarsgallery.netlify.app/assets/"))+".jpg";
+    image.setAttribute("alt", element.name);
+
+    
+    const favoriteButton = document.createElement("button");
+    const isFavorite = isInFavorites(element);
+    if (isFavorite) {
+        favoriteButton.classList.add("favorite");
+        favoriteButton.textContent = "Unlike";
+    } else {
+        favoriteButton.textContent = "Like";
+    }
+
+    favoriteButton.addEventListener("click", () => {
+        const isFavorite = toggleFavorite(element);
+        if (isFavorite) {
+            favoriteButton.classList.add("favorite");
+            favoriteButton.textContent = "Unlike";
+            onFavorite(element,true);
+        } else {
+            favoriteButton.classList.remove("favorite");
+            favoriteButton.textContent = "Like";
+            onFavorite(element,false);
+        }
+    })
+    const headSection = document.getElementById("detail-head");
+    headSection.append(favoriteButton);
+    return headSection;
+
+}
+
+export{
+    callApiByCategory,
+    callApiByElement,
+    buildElementList,
+    createListElementCard,
+    buildElementDetails,
+    createElementDetailsCard,
+    
+}
+
 //#endregion
 
-
-getApiInfoClass();
-
-// {
-//     "people": "https://swapi.dev/api/people/", 
-//     "planets": "https://swapi.dev/api/planets/", 
-//     "films": "https://swapi.dev/api/films/", 
-//     "species": "https://swapi.dev/api/species/", 
-//     "vehicles": "https://swapi.dev/api/vehicles/", 
-//     "starships": "https://swapi.dev/api/starships/"
-// }
 
 
