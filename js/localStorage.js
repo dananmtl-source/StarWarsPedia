@@ -14,7 +14,7 @@ function clearFavorites(){
 }
 function addToFavorites(element){
     const favorites = getFavoritesFromLocalStorage();
-    const oldFavorite = favorites.find(f=>f.id === element.id);
+    const oldFavorite = favorites.find(f=>f.name === element.name);
     if(!oldFavorite){
         favorites.push(element);
         saveFavoritesToLocalStorage(favorites);
@@ -22,7 +22,7 @@ function addToFavorites(element){
 }
 function removeFavorite(element){
     const favorites = getFavoritesFromLocalStorage();
-    const oldFavoriteIndex = favorites.findIndex(f=>f.id === element.id);
+    const oldFavoriteIndex = favorites.findIndex(f=>f.name === element.name);
     if(oldFavoriteIndex !== -1){
         favorites.splice(oldFavoriteIndex,1);
         saveFavoritesToLocalStorage(favorites);
@@ -31,7 +31,7 @@ function removeFavorite(element){
 
 function toggleFavorite(element){
     const favorites = getFavoritesFromLocalStorage();
-    const oldFavoriteIndex = favorites.findIndex(f=>f.id === element.id);
+    const oldFavoriteIndex = favorites.findIndex(f=>f.name === element.name);
     let result = false;
     if(oldFavoriteIndex === -1){
         favorites.push(element);
@@ -45,7 +45,7 @@ function toggleFavorite(element){
 
 function isInFavorites(element){
     const favorites = getFavoritesFromLocalStorage();
-    const oldFavorite = favorites.find(f=>f.id === element.id);
+    const oldFavorite = favorites.find(f=>f.name === element.name);
     if(oldFavorite){
         return true;
     }else{
@@ -56,6 +56,7 @@ function isInFavorites(element){
 export {
     saveFavoritesToLocalStorage,
     getFavoritesFromLocalStorage,
+    clearFavorites,
     toggleFavorite,
     addToFavorites,
     removeFavorite,

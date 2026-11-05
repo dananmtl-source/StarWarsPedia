@@ -4,27 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Favorites</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
     <header>
         <nav>
             <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/favorites.html">Favorites</a></li>
+                <li><a href="../index.html">Home</a></li>
+                <li><a href="../html/favorites.html">Favorites</a></li>
             </ul>
         </nav>
     </header>
     <form id="filter-form">
         <label for="search-input">Search</label>
-        <input type="text" name="search" id="search-input" placeholder="ID or name">
+        <input type="text" name="search" id="search-input" placeholder="name">
         <label for="type-select">Type</label>
         <select name="type" id="type-select">
             <option value="all">all</option>
         </select>
         <button type="submit">Filter</button>
     </form>
-    <section id="favorites-list"></section>
-    <script type="module" src="src/favorites.js"></script>
+    <section id="element-list"></section>
+
+    <footer class="indexFooter">
+        <ul>
+            <li>
+                <p>Política de privacidad</p>
+            </li>
+            <li>
+                <p>Contacto</p>
+            </li>
+            <li>
+                <p>Terminos y condiciones</p>
+            </li>
+        </ul>
+    </footer>
+    <script type="module" src="../js/favorites.js"></script>
 </body>
 </html>
