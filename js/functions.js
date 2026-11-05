@@ -152,12 +152,10 @@ function createListElementCard(category, elements, onFavorite = () => { }, onPag
             article.dataset.id = element.name;
 
             const id = element.url.split('/')[5];
-            if (category == null) {
-                category = element.url.split('/')[4];
-            }
+            const elementCategory = category ?? element.url.split('/')[4];
 
             const a = document.createElement("a");
-            a.setAttribute("href", `./details.html?category=${category}&id=${id}`);
+            a.setAttribute("href", new URL(`../html/details.html?category=${elementCategory}&id=${id}`, import.meta.url).href);
             const title = document.createElement("h3");
 
             title.append(element.name);
@@ -295,35 +293,35 @@ function createElementDetailsCard(category, id, element, onFavorite = () => { })
     switch (category) {
         case "people":
             const height = document.createElement("p");
-            height.append(element.height);
+            height.append(`Height: ${element.height}`);
             const mass = document.createElement("p");
-            mass.append(element.mass);
+            mass.append(`Mass: ${element.mass}`);
             const birth_year = document.createElement("p");
-            birth_year.append(element.birth_year);
+            birth_year.append(`Birth Year: ${element.birth_year}`);
             const gender = document.createElement("p");
-            gender.append(element.gender);
+            gender.append(`Gender: ${element.gender}`);
             // const homeworld = document.createElement("p");
             // homeworld.append(element.homeworld);
-            const species = document.createElement("p");
-            species.append(element.species);
+            // const species = document.createElement("p");
+            // species.append(`Species: ${element.species}`);
             // const vehicles = document.createElement("p");
             // vehicles.append(element.vehicles);
             // const starships = document.createElement("p");
             // starships.append(element.starships);
-            div.append(height, mass, birth_year, gender, species);
+            div.append(height, mass, birth_year, gender);
             break;
 
         case "planets":
             const diameter = document.createElement("p");
-            diameter.append(element.diameter);
+            diameter.append(`Diameter: ${element.diameter}`);
             const climate = document.createElement("p");
-            climate.append(element.climate);
+            climate.append(`Climate: ${element.climate}`);
             const gravity = document.createElement("p");
-            gravity.append(element.gravity);
+            gravity.append(`Gravity: ${element.gravity}`);
             const terrain = document.createElement("p");
-            terrain.append(element.terrain);
+            terrain.append(`Terrain: ${element.terrain}`);
             const surface_water = document.createElement("p");
-            surface_water.append(element.surface_water);
+            surface_water.append(`Surface water: ${element.surface_water}`);
             // const population = document.createElement("p");
             // population.append(element.population);
             // const residents = document.createElement("p");
@@ -333,17 +331,17 @@ function createElementDetailsCard(category, id, element, onFavorite = () => { })
 
         case "species":
             const classification = document.createElement("p");
-            classification.append(element.classification);
+            classification.append(`Classification: ${element.classification}`);
             const designation = document.createElement("p");
-            designation.append(element.designation);
+            designation.append(`Designation: ${element.designation}`);
             const average_height = document.createElement("p");
-            average_height.append(element.average_height);
+            average_height.append(`Average haight: ${element.average_height}`);
             const average_lifespan = document.createElement("p");
-            average_lifespan.append(element.average_lifespan);
+            average_lifespan.append(`Average lifespan: ${element.average_lifespan}`);
             // const home_world = document.createElement("p");
             // home_world.append(element.homeworld);
             const language = document.createElement("p");
-            language.append(element.language);
+            language.append(`Language: ${element.language}`);
             // const people = document.createElement("p");
             // people.append(element.people);
             div.append(classification, designation, average_height, average_lifespan, language);
@@ -351,13 +349,13 @@ function createElementDetailsCard(category, id, element, onFavorite = () => { })
 
         case "starships":
             const model = document.createElement("p");
-            model.append(element.model);
+            model.append(`Model: ${element.model}`);
             const manufacturer = document.createElement("p");
-            manufacturer.append(element.manufacturer);
+            manufacturer.append(`Manufacturer: ${element.manufacturer}`);
             const cost_in_credits = document.createElement("p");
-            cost_in_credits.append(element.cost_in_credits);
+            cost_in_credits.append(`Cost in credits: ${element.cost_in_credits}`);
             const starship_class = document.createElement("p");
-            starship_class.append(element.starship_class);
+            starship_class.append(`Starship class: ${element.starship_class}`);
             // const pilots = document.createElement("p");
             // pilots.append(element.pilots);
             div.append(model, manufacturer, cost_in_credits, starship_class);
@@ -365,13 +363,13 @@ function createElementDetailsCard(category, id, element, onFavorite = () => { })
 
         case "vehicles":
             const modelV = document.createElement("p");
-            modelV.append(element.model);
+            modelV.append(`Model: ${element.model}`);
             const manufacturerV = document.createElement("p");
-            manufacturerV.append(element.manufacturer);
+            manufacturerV.append(`Manufacturer: ${element.manufacturer}`);
             const cost_in_creditsV = document.createElement("p");
-            cost_in_creditsV.append(element.cost_in_credits);
+            cost_in_creditsV.append(`Cost in credits: ${element.cost_in_credits}`);
             const vehicle_class = document.createElement("p");
-            vehicle_class.append(element.vehicle_class);
+            vehicle_class.append(`Vehicle class: ${element.vehicle_class}`);
             // const pilots = document.createElement("p");
             // pilots.append(element.pilots);
             div.append(modelV, manufacturerV, cost_in_creditsV, vehicle_class);
