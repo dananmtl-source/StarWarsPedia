@@ -1,4 +1,4 @@
-import { createElementCard } from "./functions.js";
+import { createListElementCard } from "./functions.js";
 import { getFavoritesFromLocalStorage } from "./localStorage.js";
 
 
@@ -20,20 +20,22 @@ function loadFavorites(search="",type="all") {
 
         return true;
     })
-    const section = document.getElementById("favorites-list");
+    const section = document.getElementById("element-list");
     section.replaceChildren();
-    filteredElements.forEach(element => {
-        const card = createElementCard(element, (p, isFavorite) => {
-            if (!isFavorite) {
-                //card.remove();
-                const card = document.querySelector(`.element-card[data-name='${element.name}']`);
-                if (card) {
-                    card.remove();
-                }
-            }
-        });
-        section.append(card);
-    })
+    const card = createListElementCard(null, filteredElements);
+    // filteredElements.forEach(element => {
+    //     // const card = createListElementCard(null, element, (p, isFavorite) => {
+    //     //     if (!isFavorite) {
+    //     //         //card.remove();
+    //     //         const card = document.querySelector(`.element-card[data-name='${element.name}']`);
+    //     //         if (card) {
+    //     //             card.remove();
+    //     //         }
+    //     //     }
+    //     // });
+    //     section.append(card);
+    // })
+    section.append(card);
 }
 
 //TODO: adaptar esto para funcionar con las categorias
@@ -88,6 +90,6 @@ function controlSearchQuery(){
     })
 }
 controlSearchQuery();
-setTypesOptions();
+// setTypesOptions();
 setSearchForm();
 loadFavorites();

@@ -7,7 +7,7 @@ export class elementList{
 }
 
 export class People {
-    constructor(name, height, mass, birth_year, gender, homeworld, species, vehicles, starships, url) {
+    constructor(name, height, mass, birth_year, gender, homeworld, species, vehicles, starships, region, url) {
             this.name = name,
             this.height = height,
             this.mass = mass,
